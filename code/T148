@@ -1,0 +1,43 @@
+//递归 自顶向下版
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
+class Solution {
+public:
+    ListNode* sortList(ListNode* head) {
+        if(head==nullptr||head->next==nullptr ) return  head;
+        ListNode *p1,*p2;
+        p1=head;p2=head->next;
+        while(p2!=nullptr&&p2->next!=nullptr)
+        {
+            p1=p1->next;
+            p2=p2->next->next;
+        }
+        p2=sortList(p1->next);
+        p1->next=nullptr;
+        p1=sortList(head);
+        
+        ListNode *L=p1->val<p2->val?p1:p2;
+        if(p1->val<p2->val) p1=p1->next;
+        else p2=p2->next;
+        ListNode *l=L;
+        
+        while(!(p1==nullptr&&p2==nullptr))//待定
+        {
+            if(p1==nullptr){l->next=p2;p2=p2->next;l=l->next;continue;}
+            if(p2==nullptr){l->next=p1;p1=p1->next;l=l->next;continue;}
+            l->next=p1->val<p2->val?p1:p2;
+            if(p1->val<p2->val) p1=p1->next;
+            else p2=p2->next;
+            l=l->next;
+        }
+        return L;
+    }
+};
